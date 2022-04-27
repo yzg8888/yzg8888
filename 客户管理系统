@@ -1,0 +1,235 @@
+
+import pymysql
+import PySimpleGUI as sg
+
+def word1():
+    return
+def word2():
+    return
+def word3():
+    return
+def make_table(num_rows, num_cols):
+    data = [[j for j in range(num_cols)] for i in range(num_rows)]
+    headings =["序列","name", "性别", "国籍"]
+    data[0] = [headings for __ in range(num_cols)]
+    for i in range(1, num_rows):
+        data[i] = [i, word1(),word2(),word3()]
+    return data
+data = make_table(num_rows=1, num_cols=4)
+headings =["序列","name", "性别", "国籍"]
+
+def sort_table(table, cols):
+    for col in reversed(cols):
+        try:
+            table = sorted(table, key=operator.itemgetter(col))
+        except Exception as e:
+            sg.popup_error('Error in sort_table', 'Exception in sort_table', e)
+    return table
+
+def xinzeng():
+    序列 = str(values["-INPUT1-"])
+    name=str(values["-INPUT2-"])
+    性别=str(values["-INPUT3-"])
+    国籍=str(values["-INPUT4-"])
+    db= pymysql.connect(host="localhost",port=3306,user="root",passwd="yzg814",db="wuyedizhi",charset="utf8")
+    cursor=db.cursor()
+    spl="insert into 个人信息 values("+str(序列)+",'"+name+"','"+性别+"','"+国籍+"');"
+    cursor.execute(spl)
+    db.commit()
+    db.close()
+
+    return (values)
+
+
+
+def tianjia(event):
+    layout4 =[[sg.T("序列", size=(8, 1), key="-XULIE-"),sg.In(key="-INPUT5-", size=(15, 1), enable_events=True, visible=True),
+               sg.T("姓名", size=(8, 1), key="-NAMETXT-"),sg.In(key="-INPUT6-", size=(15, 1), enable_events=True, visible=True),
+               sg.T("性别", size=(8, 1), key="-SEXTXT-"),sg.In(key="-INPUT7-", size=(15, 1), enable_events=True, visible=True),
+               sg.T("国籍", size=(8, 1), key="-NATTXT-"),sg.In(key="-INPUT8-", size=(15, 1), enable_events=True, visible=True)]]
+    layout5 =[[sg.B("保存", key="-BAOCHEN-"), sg.B("取消", key="-CANCEL-")]]
+    layout6 = layout4 +layout5
+    window = sg.Window("客户管理系统", layout6, keep_on_top=True,)
+    while True:
+        event, values = window.read()
+        print(event,values)
+        if event == None  or event == "-CANCEL-":
+            exit()
+        if event =="-BAOCHEN-":
+            序列 = str(values["-INPUT5-"])
+            name = str(values["-INPUT6-"])
+            性别 = str(values["-INPUT7-"])
+            国籍 = str(values["-INPUT8-"])
+            db = pymysql.connect(host="localhost", port=3306, user="root", passwd="yzg814", db="wuyedizhi",
+                                                              charset="utf8")
+            cursor = db.cursor()
+            spl = "insert into 个人信息 values(" + str(序列) + ",'" + name + "','" + 性别 + "','" + 国籍 + "');"
+            cursor.execute(spl)
+            db.commit()
+            db.close()
+            window["-INPUT5-"].update("")
+            window["-INPUT6-"].update("")
+            window["-INPUT7-"].update("")
+            window["-INPUT8-"].update("")
+
+    window.close()
+    return(values)
+
+def xiugai(values):
+    values=[]
+
+
+    layout7 = [[sg.T("序列", size=(8, 1), key="-XULIE-"), sg.In(key="-INPUT9-", size=(15, 1), enable_events=True, visible=True),
+             sg.T("姓名", size=(8, 1), key="-NAMETXT-"),sg.In(key="-INPUT10-", size=(15, 1), enable_events=True, visible=True),
+             sg.T("性别", size=(8, 1), key="-SEXTXT-"), sg.In(key="-INPUT11-", size=(15, 1), enable_events=True, visible=True),
+             sg.T("国籍", size=(8, 1), key="-NATTXT-"),sg.In(key="-INPUT12-", size=(15, 1), enable_events=True, visible=True)]]
+    layout8 = [[sg.B("保存", key="-BAOCHEN-"),sg.B("修改", key="-XIUGI-"), sg.B("取消", key="-CANCEL-")]]
+    layout9 = layout7 + layout8
+    window = sg.Window("客户管理系统", layout9, keep_on_top=True, )
+
+
+
+    while True:
+        event, values = window.read()
+        print(event, values)
+
+        if event == None:
+            break
+        if event == "-BAOCHEN-":
+            window["-INPUT9-"].update(values=values[0])
+            window["-INPUT10-"].update(values=values[1])
+            window["-INPUT11-"].update(values=values[2])
+            window["-INPUT12-"].update(values=values[3])
+            序列 = str(values["-INPUT9-"])
+            name = str(values["-INPUT10-"])
+            性别 = str(values["-INPUT711-"])
+            国籍 = str(values["-INPUT12-"])
+            db = pymysql.connect(host="localhost", port=3306, user="root", passwd="yzg814", db="wuyedizhi",
+                                 charset="utf8")
+            cursor = db.cursor()
+            spl = "insert into 个人信息 values(" + str(序列) + ",'" + name + "','" + 性别 + "','" + 国籍 + "');"
+            cursor.execute(spl)
+            db.commit()
+            db.close()
+
+    window.close()
+    return (values)
+
+
+
+
+layout1=[[sg.B("中文"),sg.B("English")],
+        [sg.T("请输入基本信息",size=(40,1),key="-TITLE-")],
+        [sg.T("序列",size=(8,1),key="-XULIE-"),sg.In(key="-INPUT1-",size=(15,1),enable_events=True,visible=True),
+        sg.T("姓名",size=(8,1),key="-NAMETXT-"),sg.In(key="-INPUT2-",size=(15,1),enable_events=True,visible=True),
+        sg.T("性别",size=(8,1),key="-SEXTXT-"),sg.In(key="-INPUT3-",size=(15,1),enable_events=True,visible=True),
+        sg.T("国籍",size=(8,1),key="-NATTXT-"),sg.In(key="-INPUT4-",size=(15,1),enable_events=True,visible=True)]]
+
+layout2=[[sg.B("新增",key="-XINZENG-"),sg.B("查询",key="-CHAXU-"),sg.B("取消",key="-CANCEL-")]]
+layout3=[[sg.Table(values=data[1:][:],
+                   #values=[ [" 1 ", "wang  ", " nan ", "  zg  "]],
+                   headings= headings,
+                   max_col_width=20,
+                   auto_size_columns=True,  # 自动调整列宽（根据上面第一次的values默认值为准，update时不会调整）
+                   display_row_numbers=True,  # 序号
+                   justification='center',  # 字符排列 left right center
+                   num_rows=10,  # 行数
+                   row_height=20,  # 行高
+                   key='-table-',
+                   font=('微软雅黑', 12),
+                   text_color='black',
+                   background_color='white',
+                   enable_events=True,
+                   enable_click_events=True,
+                   bind_return_key=True,
+                   right_click_menu=["", ["添加", "删除", "修改", "---", "退出"]],
+                   expand_x=True,
+                   expand_y=True,
+                   metadata=False,
+                   visible=True)],]
+layout=layout1+layout2+layout3
+window=sg.Window("客户管理系统",layout,keep_on_top=True,resizable=True, return_keyboard_events=True,)
+while True:
+    event,values=window.read()
+    print( values)
+    #num = str(values['-table-'])[1:-1]
+
+    #num = num + 1
+    # print(num)
+    # print(list(data[num]))
+
+    # num =int(values['-table-']) + 1
+    # print(num)
+
+    if event==None:
+        break
+    if event == "添加" :
+        tianjia("-BAOCHEN-" )
+    # TABLE CLICKED Event has value in format ('-table-', '+CLICKED+', (row,col))
+
+    if event == "-XINZENG-":
+        xinzeng()
+        window["-INPUT1-"].update("")
+        window["-INPUT2-"].update("")
+        window["-INPUT3-"].update("")
+        window["-INPUT4-"].update("")
+
+    if event=="-CHAXU-":
+        db= pymysql.connect(host="localhost",port=3306,user="root",passwd="yzg814",db="wuyedizhi",charset="utf8")
+        cursor=db.cursor()
+        cursor.execute("SELECT * FROM  个人信息")
+        data=cursor.fetchall()
+        row=cursor.rowcount    # print(row) # print(list(data))  # print(type(list(data)))
+        print((data[2]))
+        new_table = [ list(row) for row in  list(data) ]    # new_table =[(list(data[0]))]
+        window['-table-'].update(values=new_table,visible=True)
+
+        db.close()
+         #if isinstance(event, tuple): # TABLE CLICKED Event has value in format ('-TABLE=', '+CLICKED+', (row,col))
+
+    if event == "修改":
+        sr=window['-table-'].SelectedRows
+        if not sr:
+            sg.Popup(window['-table-'].get())
+        else:
+            for i in window['-table-'].SelectedRows:
+                values=window['-table-'].get()[i]
+                values=("window['-table-'].get()[i][0])","window['-table-'].get()[i][1])","window['-table-'].get()[i][2])",
+                       "window['-table-'].get()[i][3])")
+
+                xiugai(values)
+
+
+
+                # window["-INPUT9-"] = values[0]
+                # window["-INPUT10-"] = values[1]
+                # window["-INPUT11-"] = values[2]
+                # window["-INPUT12-"] = values[3]
+
+                #
+                # window["-INPUT9-"].update(values=values[0])
+                # window["-INPUT10-"].update(values=values[1])
+                # window["-INPUT11-"].update(values=values[2])
+                # window["-INPUT12-"].update(values=values[3])
+
+
+
+
+
+
+        # if event[2][0] != -1 :
+        #    event[2][0] == "values['-table-']"
+        #    print(data)
+        #
+        #    xiugai(event)
+                        # num = str(values['-table-'])[1:-1]
+                        # num =num + 1
+                        # print(num)
+                        # print(list(data[num]))
+
+
+window.close()
+
+# if event[0] == '-table-':
+#     if event[2][0] != -1:  # Header was clicked and wasn't the "row" column
+#         event[2][0] == "values['-table-']"
